@@ -1,0 +1,81 @@
+name: Terraform Dev
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'terraform/**'
+
+env:
+  ARM_USE_OIDC: true
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    name: "Terraform (Dev)"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform/env/dev
+    
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicrop/setup-terraform@v3
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          enable-AzPSSession: false
+      
+      - name: Terraform Format
+        run: terraform fmt -check -recursive
+      
+      - name: Terraform Validate
+        run: terraform Validate
+
+      - name: Install TFLint
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+
+      - name: TFLint
+        run: tflint --recursive
+      
+      - name: Run tfsec (Security Scan)
+        uses: aquasecurity/tfsec-action@v1.0.0
+
+      - name: Terraform Plan
+        id: Plan
+        run: terraform plan -out=plan
+
+      - name: Save Plan Output
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform plan
+          path: terraform/env/dev/tfplan
+
+      - name: Wait for Manual Approval Before Apply
+        if: github.ref == 'ref/heads/main'
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ secrets.GITHUB_TOKEN }}
+          approvers: samsthomas
+      
+      - name: Terraform Apply
+        if: github.ref == 'ref/heads/main'
+        run: terraform apply -auto-approve tfplan
+
+    
