@@ -29,5 +29,5 @@ variable "workspace_name" { type = string }
 variable "frontend_app_insights_name" { type = string }
 variable "backend_app_insights_name" { type = string }
 
-    
+
 

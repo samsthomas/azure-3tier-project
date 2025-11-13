@@ -62,18 +62,18 @@ module "appService" {
 module "storage" {
   source = "../../modules/storage"
 
-  resource_group_name = azurerm_resource_group.rg.name
-  location = azurerm_resource_group.rg.location
+  resource_group_name  = azurerm_resource_group.rg.name
+  location             = azurerm_resource_group.rg.location
   storage_account_name = "st3tierdev${random_string.suffix.result}"
-  tags = var.tags
-  
+  tags                 = var.tags
+
 }
 
 resource "azurerm_storage_container" "tfstate" {
-  name = "tfstate"
-  storage_account_id = module.storage.storage_account_id
+  name                  = "tfstate"
+  storage_account_id    = module.storage.storage_account_id
   container_access_type = "private"
-  
+
 }
 
 resource "random_string" "suffix" {
@@ -85,14 +85,14 @@ resource "random_string" "suffix" {
 module "keyvault" {
   source = "../../modules/keyvault"
 
-  resource_group_name = azurerm_resource_group.rg.name
-  location = azurerm_resource_group.rg.location
-  key_vault_name = var.key_vault_name
-  tenant_id = data.azurerm_client_config.current.tenant_id
+  resource_group_name    = azurerm_resource_group.rg.name
+  location               = azurerm_resource_group.rg.location
+  key_vault_name         = var.key_vault_name
+  tenant_id              = data.azurerm_client_config.current.tenant_id
   current_user_object_id = data.azurerm_client_config.current.object_id
-  sql_admin_password = var.admin_password
-  tags = var.tags
-  
+  sql_admin_password     = var.admin_password
+  tags                   = var.tags
+
 }
 
 data "azurerm_client_config" "current" {}
@@ -101,22 +101,22 @@ module "logAnalytics" {
   source = "../../modules/logAnalytics"
 
   resource_group_name = azurerm_resource_group.rg.name
-  location = azurerm_resource_group.rg.location
-  workspace_name = var.workspace_name
-  tags = var.tags
-  
+  location            = azurerm_resource_group.rg.location
+  workspace_name      = var.workspace_name
+  tags                = var.tags
+
 }
 
 module "appInsights" {
   source = "../../modules/appInsights"
 
   resource_group_name = azurerm_resource_group.rg.name
-  location = azurerm_resource_group.rg.location
-  workspace_id = module.logAnalytics.workspace_id
+  location            = azurerm_resource_group.rg.location
+  workspace_id        = module.logAnalytics.workspace_id
 
   app_insights = {
     frontend = {
-        name = var.frontend_app_insights_name
+      name = var.frontend_app_insights_name
     }
 
     backend = {
