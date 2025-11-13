@@ -11,6 +11,7 @@ env:
   ARM_USE_OIDC: true
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
 
 permissions:
   id-token: write
@@ -30,11 +31,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup Terraform
-        uses: hashicrop/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v3
 
       - name: Azure Login (OIDC)
         uses: azure/login@v2
         with:
+          ARM_USE_OIDC: true
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
@@ -44,7 +46,7 @@ jobs:
         run: terraform fmt -check -recursive
       
       - name: Terraform Validate
-        run: terraform Validate
+        run: terraform validate
 
       - name: Install TFLint
         run: |
@@ -54,28 +56,28 @@ jobs:
         run: tflint --recursive
       
       - name: Run tfsec (Security Scan)
-        uses: aquasecurity/tfsec-action@v1.0.0
+        uses: aquasecurity/tfsec-action@v2
 
       - name: Terraform Plan
-        id: Plan
+        id: plan
         run: terraform plan -out=plan
 
       - name: Save Plan Output
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: terraform plan
-          path: terraform/env/dev/tfplan
+          name: terraform-plan
+          path: terraform/env/dev/plan
 
       - name: Wait for Manual Approval Before Apply
-        if: github.ref == 'ref/heads/main'
+        if: github.ref == 'refs/heads/main'
         uses: trstringer/manual-approval@v1
         with:
           secret: ${{ secrets.GITHUB_TOKEN }}
           approvers: samsthomas
       
       - name: Terraform Apply
-        if: github.ref == 'ref/heads/main'
-        run: terraform apply -auto-approve tfplan
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve plan
 
     
