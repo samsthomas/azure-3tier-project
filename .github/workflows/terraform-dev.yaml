@@ -56,7 +56,7 @@ jobs:
         run: tflint --recursive
       
       - name: Run tfsec (Security Scan)
-        uses: aquasecurity/tfsec-action@v2
+        uses: aquasecurity/tfsec-action@v1.0.0
 
       - name: Terraform Plan
         id: plan
