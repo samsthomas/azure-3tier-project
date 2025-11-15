@@ -4,6 +4,7 @@ variable "key_vault_name" { type = string }
 variable "tenant_id" { type = string }
 variable "current_user_object_id" { type = string }
 variable "sql_admin_password" { type = string }
+variable "github_oidc_object_id" { type = string }
 variable "tags" {
   type = map(string)
 }

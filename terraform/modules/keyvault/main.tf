@@ -21,6 +21,20 @@ resource "azurerm_key_vault_access_policy" "current_user" {
   
 }
 
+resource "azurerm_key_vault_access_policy" "github_oidc" {
+  key_vault_id = azurerm_key_vault.kv.id
+
+  tenant_id = var.tenant_id
+  object_id = var.github_oidc_object_id
+
+  secret_permissions = [
+    "Get",
+    "List",
+    "Set"
+  ]
+  
+}
+
 resource "azurerm_key_vault_secret" "sql_admin_password" {
   name = "sql-admin-password"
   value = var.sql_admin_password
