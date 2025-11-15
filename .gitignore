@@ -1,35 +1,17 @@
-
-.terraform/
-.terraform/*
-terraform.tfstate
-terraform.tfstate.*
-*.tfstate.backup
-*.tfvars
-*.auto.tfvars
+# Terraform state
+*.tfstate
+*.tfstate.*
 crash.log
-crash.*.log
 override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
-**/.terraform/*
-**/*.tfstate
-**/*.tfstate.*
-
-env/**/secrets.auto.tfvars
-env/**/terraform.tfvars.local
-env/**/backend.tfvars
-
+.terraform/
 .terraform.lock.hcl
 
+# Local-only variable files
+*.auto.tfvars
+*.secret.tfvars
 
-.vscode/
-.idea/
-*.swp
-
-
-.DS_Store
-Thumbs.db
-
-
-*.log
+# Ignore backup files
+*.backup
