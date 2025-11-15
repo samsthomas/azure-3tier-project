@@ -1,5 +1,16 @@
-provider "azurerm" {
-  features {}
+terraform {
+  required_version = ">= 1.5.0"
+
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.80"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.6"
+    }
+  }
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -70,7 +81,7 @@ module "storage" {
 
 resource "azurerm_storage_container" "tfstate" {
   name                  = "tfstate"
-  storage_account_id    = module.storage.storage_account_id
+  storage_account_name  = module.storage.storage_account_name
   container_access_type = "private"
 
 }
