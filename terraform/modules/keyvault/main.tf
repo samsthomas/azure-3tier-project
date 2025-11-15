@@ -35,18 +35,18 @@ resource "azurerm_key_vault_access_policy" "github_oidc" {
   
 }
 
-resource "azurerm_key_vault_secret" "sql_admin_password" {
-  name = "sql-admin-password"
-  value = var.sql_admin_password
-  key_vault_id = azurerm_key_vault.kv.id
+# resource "azurerm_key_vault_secret" "sql_admin_password" {
+#   name = "sql-admin-password"
+#   value = var.sql_admin_password
+#   key_vault_id = azurerm_key_vault.kv.id
 
-  lifecycle {
-    ignore_changes = [value]
-}
+#   lifecycle {
+#     ignore_changes = [value]
+# }
 
 
-  depends_on = [
-    azurerm_key_vault_access_policy.current_user,
-    azurerm_key_vault_access_policy.github_oidc
-  ]
-}
+#   depends_on = [
+#     azurerm_key_vault_access_policy.current_user,
+#     azurerm_key_vault_access_policy.github_oidc
+#   ]
+# }
