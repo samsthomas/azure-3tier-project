@@ -40,6 +40,11 @@ resource "azurerm_key_vault_secret" "sql_admin_password" {
   value = var.sql_admin_password
   key_vault_id = azurerm_key_vault.kv.id
 
+  lifecycle {
+    ignore_changes = [value]
+}
+
+
   depends_on = [ 
     azurerm_key_vault_access_policy.current_user 
   ] 

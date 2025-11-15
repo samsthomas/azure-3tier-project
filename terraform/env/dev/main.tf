@@ -85,9 +85,8 @@ module "storage" {
 
 resource "azurerm_storage_container" "tfstate" {
   name                  = "tfstate"
-  storage_account_name  = module.storage.storage_account_name
+  storage_account_id   = module.storage.storage_account_id
   container_access_type = "private"
-
 }
 
 resource "random_string" "suffix" {
