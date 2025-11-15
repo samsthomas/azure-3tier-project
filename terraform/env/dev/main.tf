@@ -1,6 +1,5 @@
 provider "azurerm" {
   features {}
-***REMOVED***
 }
 
 resource "azurerm_resource_group" "rg" {
