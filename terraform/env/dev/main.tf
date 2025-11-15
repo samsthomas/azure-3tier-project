@@ -105,7 +105,7 @@ module "keyvault" {
   tenant_id              = data.azurerm_client_config.current.tenant_id
   current_user_object_id = data.azurerm_client_config.current.object_id
   sql_admin_password     = var.admin_password
-  github_oidc_object_id = var.github_oidc_object_id
+  github_oidc_object_id  = var.github_oidc_object_id
   tags                   = var.tags
 
 }
