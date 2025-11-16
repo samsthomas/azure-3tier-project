@@ -51,7 +51,6 @@ sql_log_categories = [
   "Timeouts",
   "Blocks",
   "Deadlocks",
-  "SQLInsights",
   "QueryStoreRuntimeStatistics",
   "QueryStoreWaitStatistics"
 ]
@@ -60,13 +59,7 @@ sql_metric_categories = [
   "AllMetrics"
 ]
 
-appinsights_log_categories = [
-  "Requests",
-  "Exceptions",
-  "Traces",
-  "Dependencies",
-  "Events"
-]
+appinsights_log_categories = []
 
 appinsights_metric_categories = [
   "AllMetrics"
