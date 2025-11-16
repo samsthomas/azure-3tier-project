@@ -44,12 +44,12 @@ jobs:
               run: docker push $ACR_NAME.azurecr.io/backend:latest
 
             - name: Build Frontend Image
-              run:
+              run: |
                 docker build \
                   -t $ACR_NAME.azurecr.io/frontend:latest \
                   ./src/frontend
             
             - name: Push Frontend Image
-              run: docker push $ACR_NAME.azurecr.io/frontend:Latest
+              run: docker push $ACR_NAME.azurecr.io/frontend:latest
 
             
