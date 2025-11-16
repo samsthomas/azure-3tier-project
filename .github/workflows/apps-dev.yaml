@@ -1,0 +1,55 @@
+name: Build & Push App Containers
+
+on:
+  workflow_dispatch:
+  push:
+      branches: [ main ]
+      paths:
+        - "src/backend/**"
+        - "src/frontend/**"
+        - ".github/workflows/apps-dev.yaml"
+
+env:
+    ACR_NAME: acr3tierprojectdev
+
+permissions:
+    id-token: write
+    contents: read
+
+jobs:
+    build-and-push:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Azure Login (OIDC)
+              uses: azure/login@v2
+              with:
+                client-id: ${{ secrets.AZURE_CLIENT_ID }}
+                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+            
+            - name: ACR LOGIN
+              run: az acr login --name $ACR_NAME
+            
+            - name: Build Backend Image
+              run: |
+                docker build \
+                  -t $ACR_NAME.azurecr.io/backend:latest \
+                  ./src/backend
+            
+            - name: Push Backend Image
+              run: docker push $ACR_NAME.azurecr.io/backend:latest
+
+            - name: Build Frontend Image
+              run:
+                docker build \
+                  -t $ACR_NAME.azurecr.io/frontend:latest \
+                  ./src/frontend
+            
+            - name: Push Frontend Image
+              run: docker push $ACR_NAME.azurecr.io/frontend:Latest
+
+            
