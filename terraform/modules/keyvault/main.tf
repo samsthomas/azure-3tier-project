@@ -42,7 +42,7 @@ module "diagnostics_kv" {
   resource_id                = azurerm_key_vault.kv.id
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
-  log_categories = var.kv_log_categories
-  metric_categories = var.kv_metric_categories
+  log_categories    = var.log_categories
+  metric_categories = var.metric_categories
 
 }

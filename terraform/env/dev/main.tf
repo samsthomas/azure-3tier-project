@@ -87,10 +87,11 @@ module "storage" {
   location                   = azurerm_resource_group.rg.location
   storage_account_name       = "st3tierdev${random_string.suffix.result}"
   log_analytics_workspace_id = module.logAnalytics.workspace_id
-  log_categories             = var.storage_log_categories
-  metric_categories          = var.storage_metric_categories
-  tags                       = var.tags
 
+  log_categories    = var.storage_log_categories
+  metric_categories = var.storage_metric_categories
+
+  tags = var.tags
 }
 
 resource "azurerm_storage_container" "tfstate" {

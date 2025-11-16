@@ -10,9 +10,9 @@ variable "tags" {
   type = map(string)
 }
 
-variable "sql_log_categories" {
+variable "log_categories" {
   type = list(string)
 }
-variable "sql_metric_categories" {
+variable "metric_categories" {
   type = list(string)
 }

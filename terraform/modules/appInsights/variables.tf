@@ -13,9 +13,10 @@ variable "tags" {
   type = map(string)
 }
 
-variable "appinsights_log_categories" {
+variable "log_categories" {
   type = list(string)
 }
-variable "appinsights_metric_categories" {
+
+variable "metric_categories" {
   type = list(string)
 }

@@ -16,10 +16,3 @@ output "primary_connection_string" {
 output "storage_account_name" {
   value = azurerm_storage_account.sa.name
 }
-
-variable "storage_log_categories" {
-  type = list(string)
-}
-variable "storage_metric_categories" {
-  type = list(string)
-}

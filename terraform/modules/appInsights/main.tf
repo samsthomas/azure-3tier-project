@@ -19,6 +19,6 @@ module "diagnostics_appinsights" {
   resource_id                = azurerm_application_insights.ai["frontend"].id
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
-  log_categories    = var.appinsights_log_categories
-  metric_categories = var.appinsights_metric_categories
+  log_categories    = var.log_categories
+  metric_categories = var.metric_categories
 }

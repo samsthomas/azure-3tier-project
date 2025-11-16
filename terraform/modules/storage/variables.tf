@@ -6,3 +6,10 @@ variable "tags" {
   type    = map(string)
   default = {}
 }
+
+variable "log_categories" {
+  type = list(string)
+}
+variable "metric_categories" {
+  type = list(string)
+}

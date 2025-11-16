@@ -31,10 +31,10 @@ tags = {
 frontend_app_insights_name = "appi-frontend-3tier-dev"
 backend_app_insights_name  = "appi-backend-3tier-dev"
 
+
 kv_log_categories = [
   "AuditEvent",
 ]
-
 kv_metric_categories = [
   "AllMetrics",
 ]
@@ -47,7 +47,6 @@ storage_metric_categories = [
 sql_log_categories = [
   "DevOpsOperationsAudit",
 ]
-
 sql_metric_categories = [
   "AllMetrics",
 ]
@@ -62,7 +61,6 @@ appinsights_log_categories = [
   "AppExceptions",
   "PerformanceCounters",
 ]
-
 appinsights_metric_categories = [
   "AllMetrics",
 ]
@@ -74,7 +72,6 @@ appservice_log_categories = [
   "AppServiceAuditLogs",
   "AppServiceApplicationLogs",
 ]
-
 appservice_metric_categories = [
   "AllMetrics",
 ]
