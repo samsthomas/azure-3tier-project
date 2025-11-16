@@ -39,11 +39,7 @@ kv_metric_categories = [
   "AllMetrics",
 ]
 
-storage_log_categories = [
-  "StorageRead",
-  "StorageWrite",
-  "StorageDelete"
-]
+storage_log_categories = []
 
 storage_metric_categories = [
   "AllMetrics"
@@ -68,8 +64,8 @@ appinsights_log_categories = [
   "Requests",
   "Exceptions",
   "Traces",
-  "CustomEvents",
-  "Dependencies"
+  "Dependencies",
+  "Events"
 ]
 
 appinsights_metric_categories = [
