@@ -1,9 +1,9 @@
-const express = require("express")
+const express = require("express");
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-const dbConnectionString = process.env.dbConnectionString || "not-set";
+const dbConnectionString = process.env.DB_CONNECTION_STRING || "not-set";
 
 app.get("/health", (req, res) => {
     res.json({ status: "ok", time: new Date().toISOString() });

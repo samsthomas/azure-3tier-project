@@ -5,7 +5,7 @@ async function loadMessage() {
         const res = await fetch("/api/message");
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        statusEl.textContent = data.message + ` (DB config: $(data.dbconnectionStringConfigured)`;
+        statusEl.textContent = data.message + ` (DB config: ${data.dbConnectionStringConfigured})`;
     } catch (err) {
         console.error(err);
         statusEl.textContent = "Failed to load backend message.";
