@@ -31,6 +31,8 @@ tags = {
 frontend_app_insights_name = "appi-frontend-3tier-dev"
 backend_app_insights_name  = "appi-backend-3tier-dev"
 
+acr_name = "acr3tierprojectdev"
+
 
 kv_log_categories = [
   "AuditEvent",

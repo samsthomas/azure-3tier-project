@@ -68,3 +68,4 @@ variable "appservice_metric_categories" {
   type = list(string)
 }
 
+variable "acr_name" { type = string }
