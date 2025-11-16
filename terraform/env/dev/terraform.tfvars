@@ -39,39 +39,51 @@ kv_metric_categories = [
   "AllMetrics",
 ]
 
-storage_log_categories = []
-storage_metric_categories = [
-  "AllMetrics",
+storage_log_categories = [
+  "StorageRead",
+  "StorageWrite",
+  "StorageDelete"
 ]
 
-sql_log_categories = [
-  "DevOpsOperationsAudit",
+storage_metric_categories = [
+  "AllMetrics"
 ]
+
+
+sql_log_categories = [
+  "Errors",
+  "Timeouts",
+  "Blocks",
+  "Deadlocks",
+  "SQLInsights",
+  "QueryStoreRuntimeStatistics",
+  "QueryStoreWaitStatistics"
+]
+
 sql_metric_categories = [
-  "AllMetrics",
+  "AllMetrics"
 ]
 
 appinsights_log_categories = [
-  "AppTraces",
-  "AppRequests",
-  "AppMetrics",
-  "AppDependencies",
-  "AppAvailabilityResults",
-  "AppSystemEvents",
-  "AppExceptions",
-  "PerformanceCounters",
-]
-appinsights_metric_categories = [
-  "AllMetrics",
+  "Requests",
+  "Exceptions",
+  "Traces",
+  "CustomEvents",
+  "Dependencies"
 ]
 
+appinsights_metric_categories = [
+  "AllMetrics"
+]
+
+
 appservice_log_categories = [
-  "AppServiceConsoleLogs",
   "AppServiceHTTPLogs",
-  "AppServiceAppLogs",
-  "AppServiceAuditLogs",
-  "AppServiceApplicationLogs",
+  "AppServiceConsoleLogs",
+  "AppServiceAppLogs"
 ]
+
 appservice_metric_categories = [
-  "AllMetrics",
+  "AllMetrics"
 ]
+
