@@ -31,5 +31,40 @@ variable "backend_app_insights_name" { type = string }
 
 variable "github_oidc_object_id" { type = string }
 
+variable "kv_log_categories" {
+  type = list(string)
+}
+variable "kv_metric_categories" {
+  type = list(string)
+}
 
+variable "storage_log_categories" {
+  type = list(string)
+}
+variable "storage_metric_categories" {
+  type = list(string)
+}
+
+
+variable "sql_log_categories" {
+  type = list(string)
+}
+variable "sql_metric_categories" {
+  type = list(string)
+}
+
+
+variable "appinsights_log_categories" {
+  type = list(string)
+}
+variable "appinsights_metric_categories" {
+  type = list(string)
+}
+
+variable "appservice_log_categories" {
+  type = list(string)
+}
+variable "appservice_metric_categories" {
+  type = list(string)
+}
 

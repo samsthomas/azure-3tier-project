@@ -60,15 +60,8 @@ module "diagnostics_frontend" {
   resource_id                = azurerm_linux_web_app.frontend.id
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
-  log_categories = [
-    "AppServiceHTTPLogs",
-    "AppServiceConsoleLogs",
-    "AppServiceAuditLogs"
-  ]
-
-  metric_categories = [
-    "AllMetrics"
-  ]
+  log_categories    = var.appservice_log_categories
+  metric_categories = var.appservice_metric_categories
 
 }
 
@@ -79,14 +72,8 @@ module "diagnostics_backend" {
   resource_id                = azurerm_linux_web_app.backend.id
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
-  log_categories = [
-    "AppServiceHTTPLogs",
-    "AppServiceConsoleLogs",
-    "AppServiceAuditLogs"
-  ]
+  log_categories    = var.appservice_log_categories
+  metric_categories = var.appservice_metric_categories
 
-  metric_categories = [
-    "AllMetrics"
-  ]
 
 }

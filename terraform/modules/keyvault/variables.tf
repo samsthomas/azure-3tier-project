@@ -9,3 +9,10 @@ variable "log_analytics_workspace_id" {}
 variable "tags" {
   type = map(string)
 }
+
+variable "kv_log_categories" {
+  type = list(string)
+}
+variable "kv_metric_categories" {
+  type = list(string)
+}

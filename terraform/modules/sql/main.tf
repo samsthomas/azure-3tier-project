@@ -32,13 +32,7 @@ module "diagnostics_sql" {
   resource_id                = azurerm_mssql_server.sql.id
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
-  log_categories = [
-    "SQLSecurityAuditEvents",
-    "DevOpsOperationsAudit",
-    "QueryStoreRuntimeStatistics",
-  ]
+  log_categories    = var.sql_log_categories
+  metric_categories = var.sql_metric_categories
 
-  metric_categories = [
-    "AllMetrics"
-  ]
 }

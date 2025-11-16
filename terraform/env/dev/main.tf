@@ -49,6 +49,8 @@ module "sql" {
   admin_password             = var.admin_password
   database_name              = var.database_name
   log_analytics_workspace_id = module.logAnalytics.workspace_id
+  log_categories             = var.sql_log_categories
+  metric_categories          = var.sql_metric_categories
 
   app_subnet_prefix = var.subnets["subnet-app-dev"].address_prefix
 
@@ -67,6 +69,9 @@ module "appService" {
   frontend_app_name = var.frontend_app_name
   backend_app_name  = var.backend_app_name
 
+  log_categories    = var.appservice_log_categories
+  metric_categories = var.appservice_metric_categories
+
   subnet_id = module.network.subnet_ids["subnet-app-dev"]
 
   sql_connection_string = module.sql.sql_connection_string
@@ -82,6 +87,8 @@ module "storage" {
   location                   = azurerm_resource_group.rg.location
   storage_account_name       = "st3tierdev${random_string.suffix.result}"
   log_analytics_workspace_id = module.logAnalytics.workspace_id
+  log_categories             = var.storage_log_categories
+  metric_categories          = var.storage_metric_categories
   tags                       = var.tags
 
 }
@@ -109,7 +116,11 @@ module "keyvault" {
   sql_admin_password         = var.admin_password
   github_oidc_object_id      = var.github_oidc_object_id
   log_analytics_workspace_id = module.logAnalytics.workspace_id
-  tags                       = var.tags
+
+  tags = var.tags
+
+  log_categories    = var.kv_log_categories
+  metric_categories = var.kv_metric_categories
 
 }
 
@@ -131,6 +142,8 @@ module "appInsights" {
   location                   = azurerm_resource_group.rg.location
   workspace_id               = module.logAnalytics.workspace_id
   log_analytics_workspace_id = module.logAnalytics.workspace_id
+  log_categories             = var.appinsights_log_categories
+  metric_categories          = var.appinsights_metric_categories
 
   app_insights = {
     frontend = {

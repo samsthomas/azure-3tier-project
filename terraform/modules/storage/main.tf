@@ -19,13 +19,7 @@ module "diagnostics_storage" {
   resource_id                = azurerm_storage_account.sa.id
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
-  log_categories = [
-    "StorageRead",
-    "StorageWrite",
-    "StorageDelete",
-  ]
+  log_categories    = var.storage_log_categories
+  metric_categories = var.storage_metric_categories
 
-  metric_categories = [
-    "AllMetrics"
-  ]
 }

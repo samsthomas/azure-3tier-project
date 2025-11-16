@@ -30,3 +30,51 @@ tags = {
 
 frontend_app_insights_name = "appi-frontend-3tier-dev"
 backend_app_insights_name  = "appi-backend-3tier-dev"
+
+kv_log_categories = [
+  "AuditEvent",
+]
+
+kv_metric_categories = [
+  "AllMetrics",
+]
+
+storage_log_categories = []
+storage_metric_categories = [
+  "AllMetrics",
+]
+
+sql_log_categories = [
+  "DevOpsOperationsAudit",
+]
+
+sql_metric_categories = [
+  "AllMetrics",
+]
+
+appinsights_log_categories = [
+  "AppTraces",
+  "AppRequests",
+  "AppMetrics",
+  "AppDependencies",
+  "AppAvailabilityResults",
+  "AppSystemEvents",
+  "AppExceptions",
+  "PerformanceCounters",
+]
+
+appinsights_metric_categories = [
+  "AllMetrics",
+]
+
+appservice_log_categories = [
+  "AppServiceConsoleLogs",
+  "AppServiceHTTPLogs",
+  "AppServiceAppLogs",
+  "AppServiceAuditLogs",
+  "AppServiceApplicationLogs",
+]
+
+appservice_metric_categories = [
+  "AllMetrics",
+]

@@ -10,5 +10,6 @@ variable "tags" {
   type = map(string)
 }
 
-
+variable "appservice_log_categories" {}
+variable "appservice_metric_categories" {}
 

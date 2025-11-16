@@ -15,10 +15,6 @@ resource "azurerm_monitor_diagnostic_setting" "diags" {
     content {
       category = metric.value
 
-      retention_policy {
-        enabled = false
-        days    = 0
-      }
     }
   }
 }

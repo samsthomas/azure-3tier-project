@@ -12,3 +12,10 @@ variable "app_insights" {
 variable "tags" {
   type = map(string)
 }
+
+variable "appinsights_log_categories" {
+  type = list(string)
+}
+variable "appinsights_metric_categories" {
+  type = list(string)
+}
