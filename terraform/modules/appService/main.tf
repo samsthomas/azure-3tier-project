@@ -13,7 +13,7 @@ resource "azurerm_linux_web_app" "frontend" {
   location            = var.location
   resource_group_name = var.resource_group_name
   service_plan_id     = azurerm_service_plan.plan.id
-  https_only = true
+  https_only          = true
 
   tags = var.tags
 
@@ -32,10 +32,10 @@ resource "azurerm_linux_web_app" "backend" {
   location            = var.location
   resource_group_name = var.resource_group_name
   service_plan_id     = azurerm_service_plan.plan.id
-  https_only = true
+  https_only          = true
 
   tags = var.tags
-  
+
   site_config {
     always_on = true
   }
@@ -56,8 +56,8 @@ resource "azurerm_app_service_virtual_network_swift_connection" "vnet_integratio
 module "diagnostics_frontend" {
   source = "../diagnostics"
 
-  resource_name = azurerm_linux_web_app.frontend.name
-  resource_id = azurerm_linux_web_app.frontend.id
+  resource_name              = azurerm_linux_web_app.frontend.name
+  resource_id                = azurerm_linux_web_app.frontend.id
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
   log_categories = [
@@ -65,18 +65,18 @@ module "diagnostics_frontend" {
     "AppServiceConsoleLogs",
     "AppServiceAuditLogs"
   ]
-  
-  metric_categories = [ 
+
+  metric_categories = [
     "AllMetrics"
   ]
-  
+
 }
 
 module "diagnostics_backend" {
   source = "../diagnostics"
 
-  resource_name = azurerm_linux_web_app.backend.name
-  resource_id = azurerm_linux_web_app.backend.id
+  resource_name              = azurerm_linux_web_app.backend.name
+  resource_id                = azurerm_linux_web_app.backend.id
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
   log_categories = [
@@ -84,9 +84,9 @@ module "diagnostics_backend" {
     "AppServiceConsoleLogs",
     "AppServiceAuditLogs"
   ]
-  
-  metric_categories = [ 
+
+  metric_categories = [
     "AllMetrics"
   ]
-  
+
 }

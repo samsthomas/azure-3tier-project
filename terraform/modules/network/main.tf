@@ -22,10 +22,10 @@ resource "azurerm_subnet" "subnets" {
       name = "delegation-to-appservice"
 
       service_delegation {
-        name = "Microsoft.Web/serverFarms"
-        actions = [ "Microsoft.Network/virtualNetworks/subnets/action" ]
+        name    = "Microsoft.Web/serverFarms"
+        actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
       }
-    } 
+    }
   }
 }
 
@@ -53,7 +53,7 @@ resource "azurerm_network_security_rule" "rules" {
   destination_address_prefix  = "*"
   resource_group_name         = var.resource_group_name
   network_security_group_name = each.value.name
-  
+
 
 }
 

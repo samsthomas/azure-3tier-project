@@ -9,11 +9,11 @@ output "nsg_ids" {
 
 output "subnet_ids" {
   description = "ID's of the subnets created"
-  value = { for k, v in azurerm_subnet.subnets : k => v.id} 
+  value       = { for k, v in azurerm_subnet.subnets : k => v.id }
 }
 
 output "subnet_prefix" {
   description = "CIDR prefixes of the subnets"
-  value = {for k, v in azurerm_subnet.subnets : k => v.address_prefixes[0]}
-  
+  value       = { for k, v in azurerm_subnet.subnets : k => v.address_prefixes[0] }
+
 }

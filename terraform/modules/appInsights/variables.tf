@@ -4,9 +4,9 @@ variable "workspace_id" { type = string }
 variable "log_analytics_workspace_id" {}
 
 variable "app_insights" {
-    type = map(object({
-        name = string
-    }))
+  type = map(object({
+    name = string
+  }))
 }
 
 variable "tags" {

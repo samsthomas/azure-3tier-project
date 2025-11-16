@@ -1,13 +1,13 @@
 resource "azurerm_key_vault" "kv" {
-  name = var.key_vault_name
-  location = var.location
-  resource_group_name = var.resource_group_name
-  tenant_id = var.tenant_id
-  sku_name = "standard"
-  purge_protection_enabled = true
+  name                       = var.key_vault_name
+  location                   = var.location
+  resource_group_name        = var.resource_group_name
+  tenant_id                  = var.tenant_id
+  sku_name                   = "standard"
+  purge_protection_enabled   = true
   soft_delete_retention_days = 7
-  
-  tags = var.tags 
+
+  tags = var.tags
 }
 
 # resource "azurerm_key_vault_access_policy" "current_user" {
@@ -18,7 +18,7 @@ resource "azurerm_key_vault" "kv" {
 #   secret_permissions = [
 #     "Get", "List", "Set"
 #   ]
-  
+
 # }
 
 resource "azurerm_key_vault_access_policy" "github_oidc" {
@@ -32,7 +32,7 @@ resource "azurerm_key_vault_access_policy" "github_oidc" {
     "List",
     "Set"
   ]
-  
+
 }
 
 module "diagnostics_kv" {

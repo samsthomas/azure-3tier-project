@@ -7,9 +7,9 @@ output "workspace_name" {
 }
 
 output "workspace_primary_key" {
-    value = azurerm_log_analytics_workspace.law.primary_shared_key
-    sensitive = true
-  
+  value     = azurerm_log_analytics_workspace.law.primary_shared_key
+  sensitive = true
+
 }
 
 output "workspace_location" {
