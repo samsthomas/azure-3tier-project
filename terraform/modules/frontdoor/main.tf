@@ -3,6 +3,8 @@ resource "azurerm_cdn_frontdoor_profile" "fd_profile" {
   resource_group_name = var.resource_group_name
   sku_name            = "Standard_AzureFrontDoor"
 
+  response_timeout_seconds = 120
+
   tags = var.tags
 }
 
@@ -52,7 +54,7 @@ resource "azurerm_cdn_frontdoor_route" "fd_route" {
   https_redirect_enabled = true
   enabled                = true
   forwarding_protocol    = "HttpsOnly"
-  supported_protocols = ["Http", "Https"]
+  supported_protocols    = ["Http", "Https"]
 
   patterns_to_match = ["/*"]
 

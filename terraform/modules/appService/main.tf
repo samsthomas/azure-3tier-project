@@ -18,7 +18,10 @@ resource "azurerm_linux_web_app" "frontend" {
   tags = var.tags
 
   site_config {
-    always_on = true
+    minimum_tls_version = "1.2"
+    http2_enabled       = true
+    ftps_state          = "Disabled"
+    always_on           = true
   }
 
   app_settings = {
@@ -37,7 +40,10 @@ resource "azurerm_linux_web_app" "backend" {
   tags = var.tags
 
   site_config {
-    always_on = true
+    minimum_tls_version = "1.2"
+    http2_enabled       = true
+    ftps_state          = "Disabled"
+    always_on           = true
   }
 
   app_settings = {
