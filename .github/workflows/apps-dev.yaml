@@ -51,5 +51,31 @@ jobs:
             
             - name: Push Frontend Image
               run: docker push $ACR_NAME.azurecr.io/frontend:latest
+    
+    deploy:
+        runs-on: ubuntu-latest
 
+        steps:
+            - name: Azure Login (OIDC)
+              uses: azure/login@v2
+              with:
+                client-id: ${{ secrets.AZURE_CLIENT_ID }}
+                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+            - name: Deploy Backend App
+              run: |
+                az webapp config container set \
+                  --name ${{ secrets.WEBAPP_BACKEND_NAME }} \
+                  --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+                  --docker-custom-image-name $ACR_NAME.azurecr.io/backend:latest \
+                  --docker-registry-server-url https://${ACR_NAME}.azurecr.io
+
+            - name: Deploy Frontend App
+              run: |
+                az webapp config container set \
+                  --name ${{ secrets.WEBAPP_FRONTEND_NAME }} \
+                  --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+                  --docker-custom-image-name $ACR_NAME.azurecr.io/frontend:latest \
+                  --docker-registry-server-url https://${ACR_NAME}.azurecr.io                  
             
