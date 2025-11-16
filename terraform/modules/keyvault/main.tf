@@ -34,3 +34,21 @@ resource "azurerm_key_vault_access_policy" "github_oidc" {
   ]
   
 }
+
+module "diagnostics_kv" {
+  source = "../../modules/diagnostics"
+
+  resource_name              = azurerm_key_vault.kv.name
+  resource_id                = azurerm_key_vault.kv.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
+
+  log_categories = [
+    "AuditEvent",
+    "CertificateOperation",
+    "AzurePolicyEvaluationDetails"
+  ]
+
+  metric_categories = [
+    "AllMetrics"
+  ]
+}

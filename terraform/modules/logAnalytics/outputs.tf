@@ -11,3 +11,7 @@ output "workspace_primary_key" {
     sensitive = true
   
 }
+
+output "workspace_location" {
+  value = azurerm_log_analytics_workspace.law.location
+}

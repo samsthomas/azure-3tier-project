@@ -11,3 +11,21 @@ resource "azurerm_storage_account" "sa" {
   tags = var.tags
   
 }
+
+module "diagnostics_storage" {
+  source = "../../modules/diagnostics"
+
+  resource_name              = azurerm_storage_account.sa.name
+  resource_id                = azurerm_storage_account.sa.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
+
+  log_categories = [
+    "StorageRead",
+    "StorageWrite",
+    "StorageDelete",
+  ]
+
+  metric_categories = [
+    "AllMetrics"
+  ]
+}

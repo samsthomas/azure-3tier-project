@@ -11,3 +11,19 @@ resource "azurerm_application_insights" "ai" {
   tags = var.tags
   
 }
+
+module "diagnostics_appinsights" {
+  source = "../../modules/diagnostics"
+
+  resource_name              = azurerm_application_insights.ai["frontend"].name
+  resource_id                = azurerm_application_insights.ai["frontend"].id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
+
+  log_categories = [
+    "AllLogs",
+  ]
+
+  metric_categories = [
+    "AllMetrics"
+  ]
+}

@@ -5,6 +5,7 @@ variable "database_name" { type = string }
 variable "admin_username" { type = string }
 variable "admin_password" { type = string }
 variable "app_subnet_prefix" { type = string }
+variable "log_analytics_workspace_id" {}
 variable "tags" {
   type = map(string)
 }

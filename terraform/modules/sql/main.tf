@@ -24,3 +24,21 @@ resource "azurerm_mssql_firewall_rule" "allow_app_subnet" {
   end_ip_address   = cidrhost(var.app_subnet_prefix, 254)
 
 }
+
+module "diagnostics_sql" {
+  source = "../../modules/diagnostics"
+
+  resource_name              = azurerm_mssql_server.sql.name
+  resource_id                = azurerm_mssql_server.sql.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
+
+  log_categories = [
+    "SQLSecurityAuditEvents",
+    "DevOpsOperationsAudit",
+    "QueryStoreRuntimeStatistics",
+  ]
+
+  metric_categories = [
+    "AllMetrics"
+  ]
+}

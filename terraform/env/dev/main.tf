@@ -42,12 +42,13 @@ module "network" {
 module "sql" {
   source = "../../modules/sql"
 
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  sql_server_name     = var.sql_server_name
-  admin_username      = var.admin_username
-  admin_password      = var.admin_password
-  database_name       = var.database_name
+  resource_group_name        = azurerm_resource_group.rg.name
+  location                   = azurerm_resource_group.rg.location
+  sql_server_name            = var.sql_server_name
+  admin_username             = var.admin_username
+  admin_password             = var.admin_password
+  database_name              = var.database_name
+  log_analytics_workspace_id = module.logAnalytics.workspace_id
 
   app_subnet_prefix = var.subnets["subnet-app-dev"].address_prefix
 
@@ -58,8 +59,9 @@ module "sql" {
 module "appService" {
   source = "../../modules/appService"
 
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+  resource_group_name        = azurerm_resource_group.rg.name
+  location                   = azurerm_resource_group.rg.location
+  log_analytics_workspace_id = module.logAnalytics.workspace_id
 
   plan_name         = var.plan_name
   frontend_app_name = var.frontend_app_name
@@ -76,10 +78,11 @@ module "appService" {
 module "storage" {
   source = "../../modules/storage"
 
-  resource_group_name  = azurerm_resource_group.rg.name
-  location             = azurerm_resource_group.rg.location
-  storage_account_name = "st3tierdev${random_string.suffix.result}"
-  tags                 = var.tags
+  resource_group_name        = azurerm_resource_group.rg.name
+  location                   = azurerm_resource_group.rg.location
+  storage_account_name       = "st3tierdev${random_string.suffix.result}"
+  log_analytics_workspace_id = module.logAnalytics.workspace_id
+  tags                       = var.tags
 
 }
 
@@ -98,14 +101,15 @@ resource "random_string" "suffix" {
 module "keyvault" {
   source = "../../modules/keyvault"
 
-  resource_group_name    = azurerm_resource_group.rg.name
-  location               = azurerm_resource_group.rg.location
-  key_vault_name         = var.key_vault_name
-  tenant_id              = data.azurerm_client_config.current.tenant_id
-  current_user_object_id = data.azurerm_client_config.current.object_id
-  sql_admin_password     = var.admin_password
-  github_oidc_object_id  = var.github_oidc_object_id
-  tags                   = var.tags
+  resource_group_name        = azurerm_resource_group.rg.name
+  location                   = azurerm_resource_group.rg.location
+  key_vault_name             = var.key_vault_name
+  tenant_id                  = data.azurerm_client_config.current.tenant_id
+  current_user_object_id     = data.azurerm_client_config.current.object_id
+  sql_admin_password         = var.admin_password
+  github_oidc_object_id      = var.github_oidc_object_id
+  log_analytics_workspace_id = module.logAnalytics.workspace_id
+  tags                       = var.tags
 
 }
 
@@ -118,15 +122,15 @@ module "logAnalytics" {
   location            = azurerm_resource_group.rg.location
   workspace_name      = var.workspace_name
   tags                = var.tags
-
 }
 
 module "appInsights" {
   source = "../../modules/appInsights"
 
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  workspace_id        = module.logAnalytics.workspace_id
+  resource_group_name        = azurerm_resource_group.rg.name
+  location                   = azurerm_resource_group.rg.location
+  workspace_id               = module.logAnalytics.workspace_id
+  log_analytics_workspace_id = module.logAnalytics.workspace_id
 
   app_insights = {
     frontend = {
