@@ -44,7 +44,10 @@ resource "azurerm_cdn_frontdoor_route" "fd_route" {
   name                          = "${var.name}-route"
   cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.fd_endpoint.id
   cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.fd_origin_group.id
-  cdn_frontdoor_origin_ids      = azurerm_cdn_frontdoor_origin.fd_origin.id
+
+  cdn_frontdoor_origin_ids = [
+    azurerm_cdn_frontdoor_origin.fd_origin.id
+  ]
 
   https_redirect_enabled = true
   enabled                = true
