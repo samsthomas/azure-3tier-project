@@ -46,14 +46,7 @@ storage_metric_categories = [
 ]
 
 
-sql_log_categories = [
-  "Errors",
-  "Timeouts",
-  "Blocks",
-  "Deadlocks",
-  "QueryStoreRuntimeStatistics",
-  "QueryStoreWaitStatistics"
-]
+sql_log_categories = []
 
 sql_metric_categories = [
   "AllMetrics"
