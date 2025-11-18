@@ -37,6 +37,9 @@ resource "azurerm_linux_web_app" "backend" {
     "ENVIRONMENT"          = "dev"
     "PORT"                 = "3000"
     "DB_CONNECTION_STRING" = var.sql_connection_string
+    
+    WEBSITE_CORS_ALLOWED_ORIGINS = "https://${var.frontend_hostname}"
+    WEBSITE_CORS_SUPPORT_CREDENTIALS = "false"
   }
 
 }
@@ -75,30 +78,6 @@ resource "azurerm_linux_web_app" "frontend" {
   depends_on = [
     azurerm_linux_web_app.backend
   ]
-
-}
-
-resource "azurerm_linux_web_app_slot" "backend_cors" {
-  name           = "apply-cors"
-  app_service_id = azurerm_linux_web_app.backend.id
-
-  site_config {
-    cors {
-      allowed_origins = [
-        "https://${azurerm_linux_web_app.frontend.default_hostname}"
-      ]
-    }
-
-  }
-
-  depends_on = [
-    azurerm_linux_web_app.frontend
-  ]
-
-}
-resource "azurerm_app_service_virtual_network_swift_connection" "vnet_integration" {
-  app_service_id = azurerm_linux_web_app.backend.id
-  subnet_id      = var.subnet_id
 
 }
 
