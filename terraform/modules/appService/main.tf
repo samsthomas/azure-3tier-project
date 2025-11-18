@@ -31,11 +31,6 @@ resource "azurerm_linux_web_app" "backend" {
       docker_image_name   = "${var.acr_login_server}/${var.backend_image_name}:latest"
       docker_registry_url = "https://${var.acr_login_server}"
     }
-
-    cors {
-      allowed_origins = []
-    }
-
   }
 
   app_settings = {
