@@ -71,6 +71,14 @@ jobs:
                   --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
                   --docker-custom-image-name $ACR_NAME.azurecr.io/backend:latest \
                   --docker-registry-server-url https://${ACR_NAME}.azurecr.io
+            
+            - name: Restart Backend App
+              run: |
+                az webapp restart \
+                  --name ${{ secrets.WEBAPP_BACKEND_NAME }} \
+                  --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }}
+
+              
 
             - name: Deploy Frontend App
               run: |
@@ -78,5 +86,15 @@ jobs:
                   --name ${{ secrets.WEBAPP_FRONTEND_NAME }} \
                   --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
                   --docker-custom-image-name $ACR_NAME.azurecr.io/frontend:latest \
-                  --docker-registry-server-url https://${ACR_NAME}.azurecr.io                  
+                  --docker-registry-server-url https://${ACR_NAME}.azurecr.io
+            
+            - name: Restart Frontend App
+              run: |
+                az webapp restart \
+                  --name ${{ secrets.WEBAPP_FRONTEND_NAME }} \
+                  --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }}
+            
+
+
+
             
