@@ -40,7 +40,7 @@ app.get("/api/dbinit", async (req, res) => {
         `);
 
         await pool.request()
-            .input("Msg", sql.NVarChar, "Hello from backend at " + new Date().toISOString())
+            .input("Msg", sql.NVarChar, "Hello from DB at " + new Date().toISOString())
             .query("INSERT INTO Messages (message) VALUES (@msg)");
 
         res.json({ ok:true, message: "Table ready & row inserted. "});
