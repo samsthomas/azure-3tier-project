@@ -1,4 +1,4 @@
-const API_URL = window.API_URL;
+const API_URL = "__API_URL__";
 
 async function loadMessage() {
     const statusEl = document.getElementById("status");

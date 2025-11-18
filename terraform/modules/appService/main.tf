@@ -39,7 +39,6 @@ resource "azurerm_linux_web_app" "backend" {
 
   app_settings = {
     "ENVIRONMENT"          = "dev"
-    "PORT"                 = "3000"
     "DB_CONNECTION_STRING" = var.sql_connection_string
 
     WEBSITE_CORS_ALLOWED_ORIGINS     = "https://${var.frontend_app_name}.azurewebsites.net"
