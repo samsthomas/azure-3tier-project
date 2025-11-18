@@ -33,13 +33,13 @@ resource "azurerm_linux_web_app" "backend" {
     }
 
     container_registry_use_managed_identity = true
-    # container_registry_managed_identity_client_id = azurerm_linux_web_app.backend.identity[0].principal_id
 
   }
 
   app_settings = {
     "ENVIRONMENT"          = "dev"
     "DB_CONNECTION_STRING" = var.sql_connection_string
+    FRONTEND_HOSTNAME      = "${var.frontend_app_name}.azurewebsites.net"
 
     WEBSITE_CORS_ALLOWED_ORIGINS     = "https://${var.frontend_app_name}.azurewebsites.net"
     WEBSITE_CORS_SUPPORT_CREDENTIALS = "false"
@@ -72,9 +72,6 @@ resource "azurerm_linux_web_app" "frontend" {
     }
 
     container_registry_use_managed_identity = true
-
-    # container_registry_managed_identity_client_id = azurerm_linux_web_app.frontend.identity[0].principal_id
-
 
 
   }

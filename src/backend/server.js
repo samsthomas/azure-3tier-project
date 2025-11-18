@@ -1,9 +1,15 @@
 const express = require("express");
-const app = express();
 const sql = require("mssql");
-const dbConnectionString = process.env.DB_CONNECTION_STRING;
+const app = express();
+const cors = require("cors");
+
+const dbConnectionString = process.env.DB_CONNECTION_STRING || "";
 
 const PORT = process.env.PORT;
+
+app.use(cors({
+    origin: `https://${process.env.FRONTEND_HOSTNAME}`,    
+}));
 
 app.get("/health", (req, res) => {
     res.json({ status: "ok", time: new Date().toISOString() });
@@ -12,7 +18,7 @@ app.get("/health", (req, res) => {
 app.get("/api/message", (req, res) => {
     res.json({
         message: "Hello from the backend API",
-        dbConnectionStringConfigured: dbConnectionString !== "not-set"
+        dbConnectionStringConfigured: dbConnectionString.length > 0
     });
 });
 
@@ -39,7 +45,7 @@ app.get("/api/dbinit", async (req, res) => {
 
         res.json({ ok:true, message: "Table ready & row inserted. "});
     } catch (err) {
-        console.log.error("DBINIT ERROR", err);
+        console.error("DBINIT ERROR", err);
         res.status(500).json({ ok: false, error: err.message })
     }
 });
@@ -50,7 +56,7 @@ app.get("/api/dbrows", async (req, res) => {
         const result = await pool.request().query("SELECT TOP 10 * FROM Messages ORDER By id DESC");
         res.json({ ok: true, rows: result.recordset });
     } catch (err) {
-        console.log.error("DBROWS ERROR:", err);
+        console.error("DBROWS ERROR:", err);
         res.status(500).json({ ok: false, error: err.message });
     }
 });
