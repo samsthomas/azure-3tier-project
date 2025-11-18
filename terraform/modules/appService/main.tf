@@ -31,6 +31,9 @@ resource "azurerm_linux_web_app" "backend" {
       docker_image_name   = "${var.acr_login_server}/${var.backend_image_name}:latest"
       docker_registry_url = "https://${var.acr_login_server}"
     }
+
+    container_registry_managed_identity_client_id = azurerm_linux_web_app.backend.identity[0].principal_id
+
   }
 
   app_settings = {
@@ -67,6 +70,9 @@ resource "azurerm_linux_web_app" "frontend" {
       docker_image_name   = "${var.acr_login_server}/${var.frontend_image_name}:latest"
       docker_registry_url = "https://${var.acr_login_server}"
     }
+
+    container_registry_managed_identity_client_id = azurerm_linux_web_app.frontend.identity[0].principal_id
+
 
 
   }
