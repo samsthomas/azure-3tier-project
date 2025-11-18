@@ -31,7 +31,7 @@ app.get("/api/dbinit", async (req, res) => {
         const pool = await sql.connect(dbConnectionString);
 
         await pool.request().query(`
-            IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Messages' AND xtypes='U')
+            IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Messages' AND xtype='U')
             CREATE TABLE Messages (
                 id INT IDENTITY(1,1) PRIMARY KEY,
                 message NVARCHAR(255),
