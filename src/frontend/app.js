@@ -1,3 +1,5 @@
+console.log("ENV:", process.env);
+
 const API_URL = "__API_URL__";
 
 async function loadMessage() {
