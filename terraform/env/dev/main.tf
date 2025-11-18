@@ -83,6 +83,7 @@ module "appService" {
   frontend_image_name = var.frontend_image_name
   backend_image_name  = var.backend_image_name
   acr_login_server    = module.acr.login_server
+  acr_id              = module.acr.id
   log_categories      = var.appservice_log_categories
   metric_categories   = var.appservice_metric_categories
 

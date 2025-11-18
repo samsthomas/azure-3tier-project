@@ -90,6 +90,19 @@ resource "azurerm_linux_web_app" "frontend" {
 
 }
 
+resource "azurerm_role_assignment" "frontend_acr_pull" {
+  principal_id         = azurerm_linux_web_app.frontend.identity[0].principal_id
+  scope                = var.acr_id
+  role_definition_name = "AcrPull"
+}
+
+resource "azurerm_role_assignment" "backend_acr_pull" {
+  principal_id         = azurerm_linux_web_app.backend.identity[0].principal_id
+  scope                = var.acr_id
+  role_definition_name = "AcrPull"
+}
+
+
 
 module "diagnostics_frontend" {
   source = "../diagnostics"
