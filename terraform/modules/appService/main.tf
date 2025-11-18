@@ -32,7 +32,8 @@ resource "azurerm_linux_web_app" "backend" {
       docker_registry_url = "https://${var.acr_login_server}"
     }
 
-    container_registry_managed_identity_client_id = azurerm_linux_web_app.backend.identity[0].principal_id
+    container_registry_use_managed_identity = true
+    # container_registry_managed_identity_client_id = azurerm_linux_web_app.backend.identity[0].principal_id
 
   }
 
@@ -71,7 +72,9 @@ resource "azurerm_linux_web_app" "frontend" {
       docker_registry_url = "https://${var.acr_login_server}"
     }
 
-    container_registry_managed_identity_client_id = azurerm_linux_web_app.frontend.identity[0].principal_id
+    container_registry_use_managed_identity = true
+
+    # container_registry_managed_identity_client_id = azurerm_linux_web_app.frontend.identity[0].principal_id
 
 
 
@@ -86,6 +89,7 @@ resource "azurerm_linux_web_app" "frontend" {
   ]
 
 }
+
 
 module "diagnostics_frontend" {
   source = "../diagnostics"
