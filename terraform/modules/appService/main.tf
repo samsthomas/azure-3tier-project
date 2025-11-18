@@ -28,7 +28,7 @@ resource "azurerm_linux_web_app" "backend" {
     always_on           = true
 
     application_stack {
-      docker_image_name   = "${var.acr_login_server}/${var.backend_image_name}:latest"
+      docker_image_name   = "${var.backend_image_name}:latest"
       docker_registry_url = "https://${var.acr_login_server}"
     }
 
@@ -68,7 +68,7 @@ resource "azurerm_linux_web_app" "frontend" {
     always_on           = true
 
     application_stack {
-      docker_image_name   = "${var.acr_login_server}/${var.frontend_image_name}:latest"
+      docker_image_name   = "${var.frontend_image_name}:latest"
       docker_registry_url = "https://${var.acr_login_server}"
     }
 
