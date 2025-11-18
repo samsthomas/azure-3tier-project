@@ -16,3 +16,7 @@ variable "log_categories" {
 variable "metric_categories" {
   type = list(string)
 }
+
+variable "acr_login_server" { type = string }
+variable "frontend_image_name" { type = string }
+variable "backend_image_name" { type = string }

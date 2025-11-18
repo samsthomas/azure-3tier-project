@@ -1,4 +1,4 @@
-const API_URL = "https://api-3tier-dev.azurewebsites.net/api/message";
+const API_URL = window.API_URL;
 
 async function loadMessage() {
     const statusEl = document.getElementById("status");

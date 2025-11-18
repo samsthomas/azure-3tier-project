@@ -80,8 +80,11 @@ module "appService" {
   frontend_app_name = var.frontend_app_name
   backend_app_name  = var.backend_app_name
 
-  log_categories    = var.appservice_log_categories
-  metric_categories = var.appservice_metric_categories
+  frontend_image_name = var.frontend_image_name
+  backend_image_name  = var.backend_image_name
+  acr_login_server    = module.acr.login_server
+  log_categories      = var.appservice_log_categories
+  metric_categories   = var.appservice_metric_categories
 
   subnet_id = module.network.subnet_ids["subnet-app-dev"]
 

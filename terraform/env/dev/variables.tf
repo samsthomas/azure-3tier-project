@@ -69,3 +69,6 @@ variable "appservice_metric_categories" {
 }
 
 variable "acr_name" { type = string }
+variable "frontend_image_name" { type = string }
+variable "backend_image_name" { type = string }
+

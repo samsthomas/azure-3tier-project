@@ -71,3 +71,5 @@ appservice_metric_categories = [
   "AllMetrics"
 ]
 
+frontend_image_name = "frontend"
+backend_image_name  = "backend"
