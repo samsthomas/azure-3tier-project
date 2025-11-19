@@ -65,6 +65,7 @@ module "sql" {
 
   app_subnet_prefix = var.subnets["subnet-app-dev"].address_prefix
   db_subnet_id      = module.network.subnet_ids["subnet-db-dev"]
+  vnet_id           = module.network.vnet_id
   tags              = var.tags
 
 }
