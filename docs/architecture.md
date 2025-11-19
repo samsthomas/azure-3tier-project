@@ -9,9 +9,9 @@ flowchart LR
 
     B --> C[Frontend App Service]
 
-    C --> D[Backend App Service<br/>VNet Integrated]
+    C --> D[Backend App Service]
 
-    D -->|Private DNS Lookup| E[Azure SQL Database<br/>Private Endpoint]
+    D -->|Private DNS Lookup| E[Azure SQL Database]
 
     subgraph VNET[VNet]
         C
@@ -19,7 +19,7 @@ flowchart LR
         E
     end
 
-    subgraph ACR[Azure Container Registry (ACR)]
+    subgraph ACR[Azure Container Registry ACR]
         F[Frontend Image]
         G[Backend Image]
     end
