@@ -17,7 +17,7 @@ resource "azurerm_subnet" "subnets" {
 
 
   dynamic "delegation" {
-    for_each = each.key == "subnet-app-dev" ? [1] : []
+    for_each = each.key == "subnet-backend-app-dev" ? [1] : []
     content {
       name = "delegation-to-appservice"
 
