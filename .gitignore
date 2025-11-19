@@ -8,6 +8,10 @@ override.tf.json
 *_override.tf.json
 .terraform/
 .terraform.lock.hcl
+.tfvars
+!terraform.tfvars.example
+*.env
+*.secret
 
 # Local-only variable files
 *.auto.tfvars
@@ -20,3 +24,9 @@ override.tf.json
 node_modules/
 npm-debug.log
 .env
+
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/
