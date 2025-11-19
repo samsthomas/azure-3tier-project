@@ -32,6 +32,11 @@ backend_app_insights_name  = "appi-backend-3tier-dev"
 
 acr_name = "acr3tierprojectdev"
 
+private_dns_zone_virtual_network_link_name = "privatelink.database.windows.net"
+private_dns_zone_name                      = "${var.sql_server_name}-vnet-link"
+sql_private_endpoint_name                  = "${var.sql_server_name}-pe"
+private_service_connection_name            = "${var.sql_server_name}-pe-conn"
+
 
 kv_log_categories = [
   "AuditEvent",

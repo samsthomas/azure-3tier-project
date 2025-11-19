@@ -34,6 +34,39 @@ resource "azurerm_mssql_firewall_rule" "allow_azure" {
   end_ip_address   = "0.0.0.0"
 }
 
+resource "azurerm_private_dns_zone" "sql" {
+  name                = var.private_dns_zone_name
+  resource_group_name = var.resource_group_name
+
+  tags = var.tags
+
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "sql_vnet_link" {
+  name                  = var.private_dns_zone_virtual_network_link_name
+  resource_group_name   = var.resource_group_name
+  private_dns_zone_name = azurerm_private_dns_zone.sql.name
+  virtual_network_id    = var.db_subnet_id
+
+  registration_enabled = false
+
+}
+
+resource "azurerm_private_endpoint" "sql_pe" {
+  name                = var.sql_private_endpoint_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  subnet_id           = var.db_subnet_id
+
+  private_service_connection {
+    name                           = var.private_service_connection_name
+    private_connection_resource_id = azurerm_mssql_server.sql.id
+    subresource_names              = ["sqlServer"]
+    is_manual_connection           = false
+  }
+
+}
+
 module "diagnostics_sql" {
   source = "../../modules/diagnostics"
 

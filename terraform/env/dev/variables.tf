@@ -72,3 +72,8 @@ variable "acr_name" { type = string }
 variable "frontend_image_name" { type = string }
 variable "backend_image_name" { type = string }
 
+variable "private_dns_zone_virtual_network_link_name" { type = string }
+variable "private_dns_zone_name" { type = string }
+variable "sql_private_endpoint_name" { type = string }
+variable "private_service_connection_name" { type = string }
+
