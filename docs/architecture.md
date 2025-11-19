@@ -5,37 +5,50 @@
 ```mermaid
 
 flowchart LR
+
     A[User Browser] --> B[Azure Front Door]
 
     B --> C[Frontend App Service]
 
     C --> D[Backend App Service]
 
-    D -->|Private DNS Lookup| E[Azure SQL Database]
+    D --> E[SQL Private Endpoint]
 
-    subgraph VNET[VNet]
-        C
-        D
-        E
+    E --> F[Azure SQL Server]
+
+    subgraph VNET
+        subgraph SUBNET_BACKEND
+            D
+        end
+
+        subgraph SUBNET_SQL_PE
+            E
+        end
     end
 
-    subgraph ACR[Azure Container Registry ACR]
-        F[Frontend Image]
-        G[Backend Image]
+    subgraph ACR
+        G[Frontend Image]
+        H[Backend Image]
     end
 
-    subgraph OBS[Observability]
-        H[Log Analytics Workspace]
-        I[App Insights - Frontend]
-        J[App Insights - Backend]
-        K[Diagnostic Settings]
+    G --> C
+    H --> D
+
+    subgraph OBSERVABILITY
+        I[Log Analytics Workspace]
+        J[App Insights Frontend]
+        K[App Insights Backend]
+        L[Diagnostic Settings]
     end
 
-    C --> I
-    D --> J
-    C --> K
+    C --> J
     D --> K
-    E --> K
+
+    C --> L
+    D --> L
+    E --> L
+    F --> L
+    I --> L
 
 
 
