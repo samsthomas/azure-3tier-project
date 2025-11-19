@@ -11,16 +11,6 @@ resource "azurerm_key_vault" "kv" {
   tags = var.tags
 }
 
-# resource "azurerm_key_vault_access_policy" "current_user" {
-#   key_vault_id = azurerm_key_vault.kv.id
-#   tenant_id = var.tenant_id
-#   object_id = var.current_user_object_id
-
-#   secret_permissions = [
-#     "Get", "List", "Set"
-#   ]
-
-# }
 
 resource "azurerm_key_vault_access_policy" "github_oidc" {
   key_vault_id = azurerm_key_vault.kv.id

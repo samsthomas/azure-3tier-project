@@ -1,53 +1,143 @@
-# azure-3tier-project
+# 3-Tier Azure Infrastructure Project
 
-# PART 1 — BASIC 3-TIER ARCHITECTURE (NO PRIVATE ENDPOINTS)
+This repository deploys a complete 3-tier application environment on Azure using Terraform.  
+It follows a modular design, with reusable components for networking, compute, storage, observability and security.
 
-Resource Group: rg-3tier-dev
+The deployed architecture includes:
 
-## NETWORKING
-- vnet-3tier-dev (10.0.0.0/16)
-- Subnets:
-  - subnet-web-dev (10.0.1.0/24)
-  - subnet-app-dev (10.0.2.0/24)
-  - subnet-db-dev  (10.0.3.0/24)
-- NSGs: one per subnet with light rules:
-  - web-subnet: allow inbound from Front Door
-  - app-subnet: allow inbound from web-subnet
-  - db-subnet: allow inbound 1433 from app-subnet
+- Frontend App Service (container)
+- Backend App Service (container)
+- Azure SQL Database (private endpoint only)
+- Azure Container Registry (ACR)
+- Azure Front Door Standard
+- Azure Key Vault
+- Azure Storage Account
+- Virtual Network with subnets for backend + SQL private endpoints
+- Private DNS Zone for SQL
+- Log Analytics Workspace + diagnostic settings
+- Application Insights for frontend + backend
 
-## INGRESS
-- Azure Front Door (Standard)
-  - Sends traffic → frontend app
-  - Origin: frontend app public URL (simple for now)
-  - No private origin lock yet
+Each component is built as a dedicated Terraform module to keep the configuration clean and maintainable.
 
-## FRONTEND TIER
-- App Service Plan (asp-3tier-dev)
-- Frontend App Service: app-frontend-dev
-- VNet Integration → subnet-web-dev
-- Environment variables for backend URL
+---
 
-## BACKEND TIER
-- Backend App Service: app-backend-dev
-- VNet Integration → subnet-app-dev
-- Managed Identity optional in Part 1
-- Talks to SQL via public FQDN
+## Project Structure
 
-## DATABASE TIER
-- SQL Server: sqlsrv-3tier-dev
-- SQL DB: sqldb-3tier-dev
-- Public access enabled (restricted)
-  - Allow Azure services
-  - Allow your IP (for testing)
+```
+terraform/
+  env/
+    dev/
+      main.tf
+      variables.tf
+      terraform.tfvars
 
-## MONITORING
-- Application Insights (appi-3tier-dev)
-- Log Analytics Workspace (law-3tier-dev)
+  modules/
+    acr/
+    appInsights/
+    appService/
+    diagnostics/
+    frontdoor/
+    keyvault/
+    logAnalytics/
+    network/
+    sql/
+    storage/
+```
 
-## TRAFFIC FLOW
-User → Front Door → Frontend App → Backend API → SQL (public endpoint)
+env/dev contains the environment-specific composition of modules. Which would hold more environments in a production environment but just has dev for now
 
-# Notes:
-- Everything public now → much easier for testing
-- Part 2 will swap SQL & KV to private endpoints
-- Architecture is intentionally simple but clean
+modules/ contains the reusable infrastructure modules, each with its own README.
+
+## How to Deploy
+
+Prerequisites
+
+Azure CLI installed and logged in:
+```
+az login
+```
+
+Set the correct subscription:
+```
+az account set --subscription "<subscription_id>"
+```
+
+Terraform installed (v1.5+ recommended).
+Populate terraform.tfvars with your environment values.
+
+Init / plan / apply
+```
+terraform init
+terraform plan
+terraform apply
+```
+This deploys the entire environment
+
+# CI/CD Pipelines
+
+This repository uses two distinct pipelines:
+
+### Terraform Pipeline
+
+- Validates, plans and applies changes.
+- Uses GitHub OIDC for Azure authentication.
+- Performs linting with tflint.
+
+### Application Build & Deploy Pipeline
+
+- Builds Docker images for backend and frontend.
+- Pushes images to ACR.
+- Deploys containers to App Service.
+- Restarts apps to pick up new images.
+- Infrastructure and application deployments remain cleanly separated.
+
+## Environment Configuration
+
+All environment-level settings live in:
+terraform/env/dev/terraform.tfvars
+
+Typical values include:
+```
+location      = "uksouth"
+vnet_name     = "vnet-3tier-dev"
+address_space = ["10.0.0.0/16"]
+
+subnets = {
+  subnet-backend-dev = { address_prefix = "10.0.2.0/24" }
+  subnet-db-pe-dev   = { address_prefix = "10.0.3.0/24" }
+}
+
+admin_username = "sqladmin"
+```
+## How the Application Works
+
+Once deployed:
+
+Frontend App Service calls the backend using the configured API_URL.
+Backend App Service communicates with SQL over:
+VNet Integration
+SQL private endpoint
+Private DNS (privatelink.database.windows.net)
+
+Frontend → Backend flows through the public URL (Front Door).
+Backend → SQL is fully private inside the VNet.
+Backend exposes test endpoints such as:
+/health
+/api/message
+/api/dbinit
+/api/dbrows
+These are useful for confirming 3-tier connectivity.
+
+## Observability
+
+This deployment includes:
+Centralised Log Analytics Workspace
+Diagnostic settings for all major services
+Application Insights for frontend and backend
+Logs, metrics, and telemetry flow to a single workspace for easy monitoring.
+
+But there is still work to do to polish this area
+
+## What would I do differently / what would I add
+
+In the future I will look to use different network tools, enforce naming conventions and policies, add more environments / build out the application pipeline and look to lock down security as I know its not following all best practices across the board yet
