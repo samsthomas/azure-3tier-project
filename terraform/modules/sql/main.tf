@@ -35,7 +35,7 @@ resource "azurerm_mssql_firewall_rule" "allow_azure" {
 }
 
 resource "azurerm_private_dns_zone" "sql" {
-  name                = var.private_dns_zone_name
+  name                = "privatelink.database.windows.net"
   resource_group_name = var.resource_group_name
 
   tags = var.tags
@@ -43,7 +43,7 @@ resource "azurerm_private_dns_zone" "sql" {
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "sql_vnet_link" {
-  name                  = var.private_dns_zone_virtual_network_link_name
+  name                  = "${var.sql_server_name}-vnet-link"
   resource_group_name   = var.resource_group_name
   private_dns_zone_name = azurerm_private_dns_zone.sql.name
   virtual_network_id    = var.db_subnet_id
@@ -53,13 +53,13 @@ resource "azurerm_private_dns_zone_virtual_network_link" "sql_vnet_link" {
 }
 
 resource "azurerm_private_endpoint" "sql_pe" {
-  name                = var.sql_private_endpoint_name
+  name                = "${var.sql_server_name}-pe"
   location            = var.location
   resource_group_name = var.resource_group_name
   subnet_id           = var.db_subnet_id
 
   private_service_connection {
-    name                           = var.private_service_connection_name
+    name                           = "${var.sql_server_name}-pe-conn"
     private_connection_resource_id = azurerm_mssql_server.sql.id
     subresource_names              = ["sqlServer"]
     is_manual_connection           = false

@@ -63,14 +63,9 @@ module "sql" {
   log_categories             = var.sql_log_categories
   metric_categories          = var.sql_metric_categories
 
-  app_subnet_prefix                          = var.subnets["subnet-app-dev"].address_prefix
-  db_subnet_id                               = module.network.subnet_ids["subnet-db-dev"]
-  private_dns_zone_name                      = var.private_dns_zone_name
-  private_dns_zone_virtual_network_link_name = var.private_dns_zone_virtual_network_link_name
-  sql_private_endpoint_name                  = var.sql_private_endpoint_name
-  private_service_connection_name            = var.sql_private_endpoint_name
-
-  tags = var.tags
+  app_subnet_prefix = var.subnets["subnet-app-dev"].address_prefix
+  db_subnet_id      = module.network.subnet_ids["subnet-db-dev"]
+  tags              = var.tags
 
 }
 
