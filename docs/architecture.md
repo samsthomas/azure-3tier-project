@@ -9,21 +9,21 @@ flowchart LR
 
     B --> C[Frontend App Service<br/>Container Image<br/>Public URL]
 
-    C --> D[Backend App Service<br/>Container Image<br/>VNet Integrated<br/>Subnet: backend]
+    C --> D[Backend App Service<br/>Container Image<br/>VNet Integrated<br/>Subnet: backend-dev]
 
-    D -->|Private Endpoint DNS: privatelink.database.windows.net| E[Azure SQL Database<br/>Private Endpoint<br/>Subnet: db-pe]
+    D -->|Private DNS Lookup<br/>privatelink.database.windows.net| E[Azure SQL Database<br/>Private Endpoint<br/>Subnet: db-pe-dev]
 
-    subgraph VNet
+    subgraph VNET[VNet]
         C
         D
         E
     end
 
-    subgraph Azure Container Registry (ACR)
+    subgraph ACR[Azure Container Registry (ACR)]
         F[Container Images<br/>frontend:latest<br/>backend:latest]
     end
 
-    subgraph Observability
+    subgraph OBS[Observability]
         G[Log Analytics Workspace]
         H[App Insights - Frontend]
         I[App Insights - Backend]
@@ -35,5 +35,6 @@ flowchart LR
     C --> J
     D --> J
     E --> J
+
 
 ```
