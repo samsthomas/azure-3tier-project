@@ -6,7 +6,7 @@ resource "azurerm_mssql_server" "sql" {
   administrator_login           = var.admin_username
   administrator_login_password  = var.admin_password
   minimum_tls_version           = "1.2"
-  public_network_access_enabled = true
+  public_network_access_enabled = false
 
   tags = var.tags
 }
@@ -19,20 +19,20 @@ resource "azurerm_mssql_database" "db" {
   tags = var.tags
 }
 
-resource "azurerm_mssql_firewall_rule" "allow_app_subnet" {
-  name             = "allow-app-subnet"
-  server_id        = azurerm_mssql_server.sql.id
-  start_ip_address = cidrhost(var.app_subnet_prefix, 1)
-  end_ip_address   = cidrhost(var.app_subnet_prefix, 254)
+# resource "azurerm_mssql_firewall_rule" "allow_app_subnet" {
+#   name             = "allow-app-subnet"
+#   server_id        = azurerm_mssql_server.sql.id
+#   start_ip_address = cidrhost(var.app_subnet_prefix, 1)
+#   end_ip_address   = cidrhost(var.app_subnet_prefix, 254)
 
-}
+# }
 
-resource "azurerm_mssql_firewall_rule" "allow_azure" {
-  name             = "AllowAllAzureServices"
-  server_id        = azurerm_mssql_server.sql.id
-  start_ip_address = "0.0.0.0"
-  end_ip_address   = "0.0.0.0"
-}
+# resource "azurerm_mssql_firewall_rule" "allow_azure" {
+#   name             = "AllowAllAzureServices"
+#   server_id        = azurerm_mssql_server.sql.id
+#   start_ip_address = "0.0.0.0"
+#   end_ip_address   = "0.0.0.0"
+# }
 
 resource "azurerm_private_dns_zone" "sql" {
   name                = "privatelink.database.windows.net"

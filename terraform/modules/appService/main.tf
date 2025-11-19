@@ -100,6 +100,11 @@ resource "azurerm_role_assignment" "backend_acr_pull" {
   role_definition_name = "AcrPull"
 }
 
+resource "azurerm_app_service_virtual_network_swift_connection" "backend" {
+  app_service_id = azurerm_linux_web_app.backend.id
+  subnet_id      = var.subnet_id
+}
+
 
 
 module "diagnostics_frontend" {
