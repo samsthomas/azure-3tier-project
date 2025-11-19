@@ -63,10 +63,10 @@ module "sql" {
   log_categories             = var.sql_log_categories
   metric_categories          = var.sql_metric_categories
 
-  app_subnet_prefix = var.subnets["subnet-app-dev"].address_prefix
-  backend_subnet_id = module.network.subnet_ids["subnet-backend-app-dev"]
-  vnet_id           = module.network.vnet_id
-  tags              = var.tags
+  app_subnet_prefix          = var.subnets["subnet-app-dev"].address_prefix
+  private_endpoint_subnet_id = module.network.subnet_ids["subnet-db-pe-dev"]
+  vnet_id                    = module.network.vnet_id
+  tags                       = var.tags
 
 }
 
@@ -88,7 +88,7 @@ module "appService" {
   log_categories      = var.appservice_log_categories
   metric_categories   = var.appservice_metric_categories
 
-  subnet_id = module.network.subnet_ids["subnet-backend-app-dev"]
+  subnet_id = module.network.subnet_ids["subnet-backend-dev"]
 
   sql_connection_string = module.sql.sql_connection_string
 

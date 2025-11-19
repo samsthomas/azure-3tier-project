@@ -5,9 +5,10 @@ vnet_name     = "vnet-3tier-dev"
 address_space = ["10.0.0.0/16"]
 
 subnets = {
-  "subnet-app-dev"         = { address_prefix = "10.0.1.0/24" }
-  "subnet-db-dev"          = { address_prefix = "10.0.2.0/24" }
-  "subnet-backend-app-dev" = { address_prefix = "10.0.3.0/24" }
+  "subnet-app-dev"     = { address_prefix = "10.0.1.0/24" }
+  "subnet-backend-dev" = { address_prefix = "10.0.2.0/24" }
+  "subnet-db-pe-dev"   = { address_prefix = "10.0.3.0/24" }
+
 }
 
 sql_server_name = "sql-3tier-dev"

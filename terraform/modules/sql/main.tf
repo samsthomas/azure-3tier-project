@@ -56,7 +56,7 @@ resource "azurerm_private_endpoint" "sql_pe" {
   name                = "${var.sql_server_name}-pe"
   location            = var.location
   resource_group_name = var.resource_group_name
-  subnet_id           = var.backend_subnet_id
+  subnet_id           = var.private_endpoint_subnet_id
 
   private_service_connection {
     name                           = "${var.sql_server_name}-pe-conn"

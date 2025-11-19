@@ -59,8 +59,7 @@ resource "azurerm_linux_web_app" "frontend" {
     type = "SystemAssigned"
   }
 
-  virtual_network_subnet_id = var.subnet_id
-  tags                      = var.tags
+  tags = var.tags
 
   site_config {
     minimum_tls_version = "1.2"
