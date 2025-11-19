@@ -72,9 +72,6 @@ resource "azurerm_linux_web_app" "frontend" {
       docker_registry_url = "https://${var.acr_login_server}"
     }
 
-    container_registry_use_managed_identity = true
-
-
   }
 
   app_settings = {
@@ -99,10 +96,10 @@ resource "azurerm_role_assignment" "backend_acr_pull" {
   role_definition_name = "AcrPull"
 }
 
-resource "azurerm_app_service_virtual_network_swift_connection" "backend" {
-  app_service_id = azurerm_linux_web_app.backend.id
-  subnet_id      = var.subnet_id
-}
+# resource "azurerm_app_service_virtual_network_swift_connection" "backend" {
+#   app_service_id = azurerm_linux_web_app.backend.id
+#   subnet_id      = var.subnet_id
+# }
 
 
 

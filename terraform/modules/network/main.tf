@@ -17,7 +17,7 @@ resource "azurerm_subnet" "subnets" {
 
 
   dynamic "delegation" {
-    for_each = each.key == "subnet-backend-app-dev" ? [1] : []
+    for_each = each.key == "subnet-backend-dev" ? [1] : []
     content {
       name = "delegation-to-appservice"
 
@@ -48,7 +48,7 @@ resource "azurerm_network_security_rule" "rules" {
   access                      = "Allow"
   protocol                    = "Tcp"
   source_port_range           = "*"
-  destination_port_range      = each.key == "subnet-db-dev" ? "1433" : "443"
+  destination_port_range      = each.key == "subnet-db-pe-dev" ? "1433" : "443"
   source_address_prefix       = "*"
   destination_address_prefix  = "*"
   resource_group_name         = var.resource_group_name
