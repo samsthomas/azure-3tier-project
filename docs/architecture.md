@@ -5,13 +5,13 @@
 ```mermaid
 
 flowchart LR
-    A[User Browser] --> B[Azure Front Door<br/>Public Endpoint]
+    A[User Browser] --> B[Azure Front Door]
 
-    B --> C[Frontend App Service<br/>Container Image<br/>Public URL]
+    B --> C[Frontend App Service]
 
-    C --> D[Backend App Service<br/>Container Image<br/>VNet Integrated<br/>Subnet: backend-dev]
+    C --> D[Backend App Service<br/>VNet Integrated]
 
-    D -->|Private DNS Lookup<br/>privatelink.database.windows.net| E[Azure SQL Database<br/>Private Endpoint<br/>Subnet: db-pe-dev]
+    D -->|Private DNS Lookup| E[Azure SQL Database<br/>Private Endpoint]
 
     subgraph VNET[VNet]
         C
@@ -20,21 +20,23 @@ flowchart LR
     end
 
     subgraph ACR[Azure Container Registry (ACR)]
-        F[Container Images<br/>frontend:latest<br/>backend:latest]
+        F[Frontend Image]
+        G[Backend Image]
     end
 
     subgraph OBS[Observability]
-        G[Log Analytics Workspace]
-        H[App Insights - Frontend]
-        I[App Insights - Backend]
-        J[Diagnostic Settings]
+        H[Log Analytics Workspace]
+        I[App Insights - Frontend]
+        J[App Insights - Backend]
+        K[Diagnostic Settings]
     end
 
-    C --> H
-    D --> I
-    C --> J
+    C --> I
     D --> J
-    E --> J
+    C --> K
+    D --> K
+    E --> K
+
 
 
 ```
