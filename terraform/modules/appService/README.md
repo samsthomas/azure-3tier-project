@@ -19,6 +19,7 @@ Deploys the application hosting layer for the solution, including:
 - Backend App Service is VNet-integrated using `virtual_network_subnet_id` so it can reach the SQL Private Endpoint.
 - Both apps pull their container images from ACR using managed identity.
 - Backend injects database connection string; frontend injects backend API URL.
+- Frontend API URL and backend CORS are built from the Front Door hostname.
 - Each app receives its own diagnostic settings.
 
 ## Inputs
@@ -35,6 +36,7 @@ Deploys the application hosting layer for the solution, including:
 | `acr_login_server` | string | ACR login server. |
 | `acr_id` | string | ACR resource ID (for AcrPull role). |
 | `sql_connection_string` | string | Connection string for backend. |
+| `frontdoor_hostname` | string | Front Door hostname used for API URL and CORS. |
 | `subnet_id` | string | Subnet for VNet integration (backend only). |
 | `log_analytics_workspace_id` | any | Workspace for diagnostics. |
 | `log_categories` | list(string) | Diagnostics log categories. |
@@ -66,6 +68,7 @@ module "appService" {
   backend_image_name  = var.backend_image_name
   acr_login_server    = module.acr.login_server
   acr_id              = module.acr.id
+  frontdoor_hostname  = module.frontdoor.endpoint_hostname
 
   log_categories    = var.appservice_log_categories
   metric_categories = var.appservice_metric_categories

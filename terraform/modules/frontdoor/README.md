@@ -6,15 +6,15 @@ Creates an Azure Front Door (Standard) profile, endpoint, origin group, origin, 
 ## Resources Created
 - `azurerm_cdn_frontdoor_profile`
 - `azurerm_cdn_frontdoor_endpoint`
-- `azurerm_cdn_frontdoor_origin_group`
-- `azurerm_cdn_frontdoor_origin`
-- `azurerm_cdn_frontdoor_route`
+- `azurerm_cdn_frontdoor_origin_group` (frontend and backend)
+- `azurerm_cdn_frontdoor_origin` (frontend and backend)
+- `azurerm_cdn_frontdoor_route` (frontend and backend)
 
 ## Notes
-- Designed to front the **frontend App Service**.
-- Routes all traffic (`/*`) to the web app origin.
+- Fronts both the frontend (`/*`) and backend API (`/api/*`) App Services.
+- Backend traffic is routed to a dedicated origin group.
 - Enforces HTTPS redirection and uses HTTPS-only forwarding.
-- Origin host header is set to the App Service default hostname.
+- Origin host headers are set to the respective App Service default hostnames.
 - No custom domains configured here; those can be added separately if needed.
 
 ## Inputs
@@ -24,6 +24,7 @@ Creates an Azure Front Door (Standard) profile, endpoint, origin group, origin, 
 | `name` | string | Base name used for all Front Door resources. |
 | `resource_group_name` | string | Resource group for deployment. |
 | `app_service_default_hostname` | string | Default hostname of the frontend app (origin). |
+| `backend_default_hostname` | string | Default hostname of the backend app (origin for `/api/*`). |
 | `tags` | map(string) | Tags applied to all resources. |
 
 ## Outputs
@@ -42,5 +43,6 @@ module "frontdoor" {
   name                         = "3tier-dev"
   resource_group_name          = azurerm_resource_group.rg.name
   app_service_default_hostname = module.appService.frontend_default_hostname
+  backend_default_hostname     = module.appService.backend_url
   tags = var.tags
 }

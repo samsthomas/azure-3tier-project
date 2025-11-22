@@ -9,7 +9,7 @@ The deployed architecture includes:
 - Backend App Service (container)
 - Azure SQL Database (private endpoint only)
 - Azure Container Registry (ACR)
-- Azure Front Door Standard
+- Azure Front Door Standard (frontend + `/api` backend routing)
 - Azure Key Vault
 - Azure Storage Account
 - Virtual Network with subnets for backend + SQL private endpoints
@@ -119,7 +119,8 @@ VNet Integration
 SQL private endpoint
 Private DNS (privatelink.database.windows.net)
 
-Frontend → Backend flows through the public URL (Front Door).
+Frontend → Backend flows through the public URL (Front Door) with `/api/*` pinned to the backend origin.
+Frontend builds its API_URL from the Front Door hostname and the backend CORS allowlist uses the same hostname.
 Backend → SQL is fully private inside the VNet.
 Backend exposes test endpoints such as:
 /health
