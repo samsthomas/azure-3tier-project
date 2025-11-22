@@ -66,32 +66,6 @@ resource "azurerm_cdn_frontdoor_origin" "backend_origin" {
   certificate_name_check_enabled = false
 }
 
-resource "azurerm_cdn_frontdoor_route" "fd_route" {
-  name                          = "${var.name}-route"
-  cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.fd_endpoint.id
-  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.fd_origin_group.id
-
-  cdn_frontdoor_origin_ids = [
-    azurerm_cdn_frontdoor_origin.fd_origin.id
-  ]
-
-  https_redirect_enabled = true
-  enabled                = true
-  forwarding_protocol    = "HttpsOnly"
-  supported_protocols    = ["Http", "Https"]
-
-  patterns_to_match = ["/*"]
-
-  link_to_default_domain = true
-
-  #   origin_path = ""
-
-  cache {
-    query_string_caching_behavior = "IgnoreQueryString"
-  }
-
-}
-
 resource "azurerm_cdn_frontdoor_route" "fd_route_backend" {
   name                          = "${var.name}-route-backend"
   cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.fd_endpoint.id
@@ -111,3 +85,35 @@ resource "azurerm_cdn_frontdoor_route" "fd_route_backend" {
     query_string_caching_behavior = "IgnoreQueryString"
   }
 }
+
+
+resource "azurerm_cdn_frontdoor_route" "fd_route" {
+  name                          = "${var.name}-route"
+  cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.fd_endpoint.id
+  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.fd_origin_group.id
+
+  cdn_frontdoor_origin_ids = [
+    azurerm_cdn_frontdoor_origin.fd_origin.id
+  ]
+
+  https_redirect_enabled = true
+  enabled                = true
+  forwarding_protocol    = "HttpsOnly"
+  supported_protocols    = ["Http", "Https"]
+
+  patterns_to_match = ["/*"]
+
+  link_to_default_domain = true
+
+  depends_on = [
+    azurerm_cdn_frontdoor_route.fd_route_backend
+  ]
+
+  #   origin_path = ""
+
+  cache {
+    query_string_caching_behavior = "IgnoreQueryString"
+  }
+
+}
+
