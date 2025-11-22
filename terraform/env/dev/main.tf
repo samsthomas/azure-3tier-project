@@ -30,6 +30,7 @@ module "frontdoor" {
   name                         = "3tier-dev"
   resource_group_name          = azurerm_resource_group.rg.name
   app_service_default_hostname = module.appService.frontend_default_hostname
+  backend_default_hostname     = module.appService.backend_url
 
   tags = var.tags
 

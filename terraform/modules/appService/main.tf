@@ -72,7 +72,7 @@ resource "azurerm_linux_web_app" "frontend" {
       docker_registry_url = "https://${var.acr_login_server}"
     }
 
-  container_registry_use_managed_identity = true
+    container_registry_use_managed_identity = true
 
   }
 

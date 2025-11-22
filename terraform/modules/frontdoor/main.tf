@@ -42,6 +42,30 @@ resource "azurerm_cdn_frontdoor_origin" "fd_origin" {
 
 }
 
+resource "azurerm_cdn_frontdoor_origin_group" "fd_backend_origin_group" {
+  name                     = "${var.name}-origin-backend"
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.fd_profile.id
+
+  session_affinity_enabled = false
+
+  load_balancing {
+    sample_size                 = 4
+    successful_samples_required = 3
+  }
+}
+
+resource "azurerm_cdn_frontdoor_origin" "backend_origin" {
+  name                          = "${var.name}-backend-origin"
+  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.fd_backend_origin_group.id
+
+  host_name          = var.backend_default_hostname
+  https_port         = 443
+  origin_host_header = var.backend_default_hostname
+
+  enabled                        = true
+  certificate_name_check_enabled = false
+}
+
 resource "azurerm_cdn_frontdoor_route" "fd_route" {
   name                          = "${var.name}-route"
   cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.fd_endpoint.id
@@ -66,4 +90,24 @@ resource "azurerm_cdn_frontdoor_route" "fd_route" {
     query_string_caching_behavior = "IgnoreQueryString"
   }
 
+}
+
+resource "azurerm_cdn_frontdoor_route" "fd_route_backend" {
+  name                          = "${var.name}-route-backend"
+  cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.fd_endpoint.id
+  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.fd_backend_origin_group.id
+
+  cdn_frontdoor_origin_ids = [
+    azurerm_cdn_frontdoor_origin.backend_origin.id
+  ]
+
+  patterns_to_match      = ["/api/*"]
+  https_redirect_enabled = true
+  forwarding_protocol    = "HttpsOnly"
+  supported_protocols    = ["Http", "Https"]
+  link_to_default_domain = true
+
+  cache {
+    query_string_caching_behavior = "IgnoreQueryString"
+  }
 }
