@@ -40,9 +40,9 @@ resource "azurerm_linux_web_app" "backend" {
   app_settings = {
     "ENVIRONMENT"          = "dev"
     "DB_CONNECTION_STRING" = var.sql_connection_string
-    FRONTEND_HOSTNAME      = "${var.frontend_app_name}.azurewebsites.net"
+    FRONTEND_HOSTNAME      = var.frontdoor_hostname
 
-    WEBSITE_CORS_ALLOWED_ORIGINS     = "https://${var.frontend_app_name}.azurewebsites.net"
+    WEBSITE_CORS_ALLOWED_ORIGINS     = "https://${var.frontdoor_hostname}"
     WEBSITE_CORS_SUPPORT_CREDENTIALS = "false"
   }
 
@@ -78,7 +78,7 @@ resource "azurerm_linux_web_app" "frontend" {
 
   app_settings = {
     "ENVIRONMENT" = "dev"
-    API_URL       = "https://${azurerm_linux_web_app.backend.default_hostname}/api/message"
+    API_URL       = "https://${var.frontdoor_hostname}/api/message"
   }
   depends_on = [
     azurerm_linux_web_app.backend

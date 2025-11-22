@@ -88,6 +88,7 @@ module "appService" {
   acr_id              = module.acr.id
   log_categories      = var.appservice_log_categories
   metric_categories   = var.appservice_metric_categories
+  frontdoor_hostname  = module.frontdoor.endpoint_hostname
 
   subnet_id = module.network.subnet_ids["subnet-backend-dev"]
 
