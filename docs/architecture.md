@@ -9,6 +9,7 @@ flowchart LR
     Actions[GitHub Actions]
     subgraph Workflows["Workflows"]
         subgraph TFWorkflow["Terraform (Dev)"]
+            direction LR
             TFFmt[fmt]
             TFValidate[validate]
             TFTFLint[tflint]
