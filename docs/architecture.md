@@ -3,53 +3,100 @@
 ## High-Level 3-Tier Architecture
 
 ```mermaid
-
 flowchart LR
+    User[User Browser]
 
-    A[User Browser] --> B[Azure Front Door]
-
-    B --> C[Frontend App Service]
-
-    C --> D[Backend App Service]
-
-    D --> E[SQL Private Endpoint]
-
-    E --> F[Azure SQL Server]
-
-    subgraph VNET
-        subgraph SUBNET_BACKEND
-            D
+    subgraph RG["Resource Group"]
+        subgraph FD["Azure Front Door"]
+            FDProfile[Front Door Profile]
+            FDEndpoint[Front Door Endpoint]
+            FDRouteWeb["Route /*"]
+            FDRouteApi["Route /api/*"]
+            FDProfile --> FDEndpoint
+            FDEndpoint --> FDRouteWeb
+            FDEndpoint --> FDRouteApi
         end
 
-        subgraph SUBNET_SQL_PE
-            E
+        subgraph AppSvc["App Service"]
+            Plan[App Service Plan]
+            FEApp[Frontend Linux Web App]
+            BEApp[Backend Linux Web App]
+            Plan --> FEApp
+            Plan --> BEApp
+        end
+
+        subgraph Network["Virtual Network"]
+            VNet[VNet]
+            SubnetApp["Subnet: subnet-backend-dev (delegated)"]
+            SubnetPE["Subnet: subnet-db-pe-dev"]
+            NSGApp[NSG: nsg-backend-dev]
+            NSGPE[NSG: nsg-db-pe-dev]
+            VNet --> SubnetApp
+            VNet --> SubnetPE
+            NSGApp --> SubnetApp
+            NSGPE --> SubnetPE
+        end
+
+        subgraph Data["SQL + Private Link"]
+            SqlServer[Azure SQL Server]
+            SqlDb[SQL Database]
+            SqlPE[SQL Private Endpoint]
+            PrivateDNS["Private DNS Zone: privatelink.database.windows.net"]
+            VNetLink[Private DNS VNet Link]
+            SqlServer --> SqlDb
+            SqlPE --> SqlServer
+            PrivateDNS --> VNetLink
+            VNetLink --> VNet
+        end
+
+        subgraph ACR["Azure Container Registry"]
+            FEImage[Frontend Image]
+            BEImage[Backend Image]
+        end
+
+        subgraph Storage["Storage"]
+            StorageAcct[Storage Account]
+            TfState[Container: tfstate]
+            StorageAcct --> TfState
+        end
+
+        subgraph KV["Key Vault"]
+            KeyVault[Key Vault]
+            GitHubOIDC[GitHub OIDC Principal]
+            GitHubOIDC --> KeyVault
+        end
+
+        subgraph Obs["Observability"]
+            LAW[Log Analytics Workspace]
+            AIFe[App Insights Frontend]
+            AIBE[App Insights Backend]
+            Diag[Diagnostic Settings]
         end
     end
 
-    subgraph ACR
-        G[Frontend Image]
-        H[Backend Image]
-    end
+    User --> FDEndpoint
+    FDRouteWeb --> FEApp
+    FDRouteApi --> BEApp
+    FEApp -->|API calls| FDEndpoint
 
-    G --> C
-    H --> D
+    BEApp --> SqlPE
+    BEApp -. VNet integration .-> SubnetApp
+    SqlPE --> SubnetPE
 
-    subgraph OBSERVABILITY
-        I[Log Analytics Workspace]
-        J[App Insights Frontend]
-        K[App Insights Backend]
-        L[Diagnostic Settings]
-    end
+    FEImage --> FEApp
+    BEImage --> BEApp
 
-    C --> J
-    D --> K
+    ACR --> FEApp
+    ACR --> BEApp
 
-    C --> L
-    D --> L
-    E --> L
-    F --> L
-    I --> L
+    FEApp --> AIFe
+    BEApp --> AIBE
 
-
-
+    FEApp --> Diag
+    BEApp --> Diag
+    SqlServer --> Diag
+    StorageAcct --> Diag
+    KeyVault --> Diag
+    AIFe --> Diag
+    Diag --> LAW
 ```
