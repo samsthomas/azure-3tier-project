@@ -7,10 +7,25 @@ flowchart LR
     User[User Browser]
     GitHub[GitHub Repo]
     Actions[GitHub Actions]
-    TFWorkflow["Workflow: Terraform (Dev)"]
-    AppsWorkflow["Workflow: Apps (Build & Deploy)"]
-    TFSteps["Steps: fmt → validate → tflint → tfsec scan → plan → approval → apply"]
-    AppsSteps["Steps: docker build → push image → deploy → restart"]
+    subgraph Workflows["Workflows"]
+        subgraph TFWorkflow["Terraform (Dev)"]
+            TFFmt[fmt]
+            TFValidate[validate]
+            TFTFLint[tflint]
+            TFTFSec[tfsec scan]
+            TFPlan[plan]
+            TFApprove[manual approval]
+            TFApply[apply]
+            TFFmt --> TFValidate --> TFTFLint --> TFTFSec --> TFPlan --> TFApprove --> TFApply
+        end
+        subgraph AppsWorkflow["Apps (Build & Deploy)"]
+            Build[docker build]
+            Push[push image]
+            Deploy[deploy]
+            Restart[restart]
+            Build --> Push --> Deploy --> Restart
+        end
+    end
 
     subgraph RG["Resource Group"]
         subgraph FD["Azure Front Door"]
@@ -85,11 +100,9 @@ flowchart LR
     GitHub --> Actions
     Actions --> TFWorkflow
     Actions --> AppsWorkflow
-    TFWorkflow --> TFSteps
-    AppsWorkflow --> AppsSteps
-    AppsSteps -->|Push image| ACR
-    AppsSteps -->|Deploy| FEApp
-    AppsSteps -->|Deploy| BEApp
+    Push -->|Push image| ACR
+    Deploy -->|Deploy| FEApp
+    Deploy -->|Deploy| BEApp
 
     FEApp --> AIFe
     BEApp --> AIBE
