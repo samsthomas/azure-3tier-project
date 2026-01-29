@@ -5,32 +5,32 @@
 ```mermaid
 flowchart LR
     User[User Browser]
+    GitHub[GitHub Repo]
+    Actions[GitHub Actions Workflows]
 
     subgraph RG["Resource Group"]
         subgraph FD["Azure Front Door"]
-            FDProfile[Front Door Profile]
             FDEndpoint[Front Door Endpoint]
             FDRouteWeb["Route /*"]
             FDRouteApi["Route /api/*"]
-            FDProfile --> FDEndpoint
             FDEndpoint --> FDRouteWeb
             FDEndpoint --> FDRouteApi
         end
 
         subgraph AppSvc["App Service"]
             Plan[App Service Plan]
-            FEApp[Frontend Linux Web App]
-            BEApp[Backend Linux Web App]
+            FEApp[Frontend Web App]
+            BEApp[Backend Web App]
             Plan --> FEApp
             Plan --> BEApp
         end
 
         subgraph Network["Virtual Network"]
             VNet[VNet]
-            SubnetApp["Subnet: subnet-backend-dev (delegated)"]
-            SubnetPE["Subnet: subnet-db-pe-dev"]
-            NSGApp[NSG: nsg-backend-dev]
-            NSGPE[NSG: nsg-db-pe-dev]
+            SubnetApp["Backend Subnet (delegated)"]
+            SubnetPE["SQL Private Endpoint Subnet"]
+            NSGApp[NSG: Backend Subnet]
+            NSGPE[NSG: SQL PE Subnet]
             VNet --> SubnetApp
             VNet --> SubnetPE
             NSGApp --> SubnetApp
@@ -41,12 +41,10 @@ flowchart LR
             SqlServer[Azure SQL Server]
             SqlDb[SQL Database]
             SqlPE[SQL Private Endpoint]
-            PrivateDNS["Private DNS Zone: privatelink.database.windows.net"]
-            VNetLink[Private DNS VNet Link]
+            PrivateDNS["Private DNS Zone"]
             SqlServer --> SqlDb
             SqlPE --> SqlServer
-            PrivateDNS --> VNetLink
-            VNetLink --> VNet
+            PrivateDNS --> VNet
         end
 
         subgraph ACR["Azure Container Registry"]
@@ -54,16 +52,8 @@ flowchart LR
             BEImage[Backend Image]
         end
 
-        subgraph Storage["Storage"]
-            StorageAcct[Storage Account]
-            TfState[Container: tfstate]
-            StorageAcct --> TfState
-        end
-
         subgraph KV["Key Vault"]
             KeyVault[Key Vault]
-            GitHubOIDC[GitHub OIDC Principal]
-            GitHubOIDC --> KeyVault
         end
 
         subgraph Obs["Observability"]
@@ -85,9 +75,13 @@ flowchart LR
 
     FEImage --> FEApp
     BEImage --> BEApp
-
     ACR --> FEApp
     ACR --> BEApp
+
+    GitHub --> Actions
+    Actions -->|Build & push| ACR
+    Actions -->|Deploy| FEApp
+    Actions -->|Deploy| BEApp
 
     FEApp --> AIFe
     BEApp --> AIBE
@@ -95,7 +89,6 @@ flowchart LR
     FEApp --> Diag
     BEApp --> Diag
     SqlServer --> Diag
-    StorageAcct --> Diag
     KeyVault --> Diag
     AIFe --> Diag
     Diag --> LAW
